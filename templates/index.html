@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CAPTCHA Solver · Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar d-flex justify-content-between align-items-center">
+      <div class="brand"><span class="brand-icon"><i class="bi bi-grid-3x3-gap-fill"></i></span> Captcha<span class="brand-light">Solver</span><span class="brand-suffix">&#160;</span></div>
+      <nav class="main-nav"><a href="{{ url_for('index') }}" class="active">Solver</a><a href="{{ url_for('samples') }}">Samples</a></nav>
+      <span class="status" id="modelStatus"><span class="status-dot"></span><span id="statusText">Checking model</span></span>
+    </header>
+
+    <main class="container content">
+      <div class="intro text-center">
+        <!--<div class="eyebrow">IMAGE RECOGNITION DEMONSTRATION</div>-->
+        <h1>Solve an image CAPTCHA<span class="accent">.</span></h1>
+        <p>Upload a CAPTCHA image and see the OCR model's prediction in seconds.</p>
+      </div>
+
+      <div class="row justify-content-center g-4">
+        <div class="col-lg-7">
+          <section class="panel h-100">
+            <div class="panel-heading d-flex justify-content-between align-items-center">
+              <div><span class="step">01</span> <h2>Upload image</h2></div>
+              <span class="format-label">PNG, JPG, GIF, WEBP, BMP</span>
+            </div>
+            <div class="panel-body">
+              <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Select or drop an image">
+                <input type="file" id="imageInput" accept="image/png,image/jpeg,image/gif,image/webp,image/bmp" hidden>
+                <div id="uploadHint">
+                  <div class="upload-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+                  <div class="drop-title">Drag &amp; drop your image here</div>
+                  <div class="drop-subtitle">or <span class="browse">browse files</span> from your device</div><div class="small-note">Need an example? <a href="{{ url_for('samples') }}">Browse samples</a></div>
+                  <div class="small-note">Maximum file size: 5 MB</div>
+                </div>
+                <div id="previewWrap" class="d-none">
+                  <img id="imagePreview" alt="Selected CAPTCHA preview">
+                  <div class="preview-prompt">Click or drop another image to replace</div>
+                </div>
+              </div>
+              <div class="selected-file d-none" id="selectedFile"><i class="bi bi-file-earmark-image"></i> <span id="fileName"></span><button id="removeFile" type="button" class="remove-file" aria-label="Remove file"><i class="bi bi-x-lg"></i></button></div>
+              <label for="apiToken" class="field-label">DEMO API KEY</label>
+              <input id="apiToken" type="password" class="form-control mb-3" autocomplete="off" placeholder="Enter the bearer token supplied for this demo" aria-label="Demo API key">
+              <label for="captchaType" class="field-label">CAPTCHA TYPE</label>
+              <select id="captchaType" class="form-select" aria-label="CAPTCHA type"><option value="image">Image CAPTCHA (OCR)</option></select>
+              <button class="btn solve-button w-100" id="solveBtn" disabled><span id="solveBtnText"><i class="bi bi-stars me-2"></i>Solve CAPTCHA</span><span id="solveSpinner" class="d-none"><span class="spinner-border spinner-border-sm me-2"></span>Processing image...</span></button>
+              <div class="alert alert-danger mt-3 mb-0 d-none" id="errorAlert" role="alert"></div>
+            </div>
+          </section>
+        </div>
+        <div class="col-lg-5">
+          <section class="panel results-panel h-100">
+            <div class="panel-heading"><span class="step">02</span> <h2>Prediction</h2></div>
+            <div class="panel-body results-body" aria-live="polite">
+              <div id="emptyResult" class="empty-result"><div class="result-icon"><i class="bi bi-terminal"></i></div><h3>Awaiting an image</h3><p>The recognized text will appear here after processing.</p></div>
+              <div id="resultContent" class="d-none">
+                <div class="result-label">RECOGNIZED TEXT</div>
+                <div class="result-box"><span id="resultText"></span><button id="copyBtn" class="copy-button" type="button" title="Copy result"><i class="bi bi-copy"></i></button></div>
+                <div class="result-meta"><i class="bi bi-check-circle-fill"></i> Prediction complete <span id="elapsedText"></span></div>
+                <p class="result-disclaimer">This is the model's prediction, not a guaranteed correct solution.</p>
+                <button id="resetBtn" class="btn btn-outline-secondary w-100 mt-3" type="button"><i class="bi bi-arrow-repeat me-2"></i>Try another image</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
